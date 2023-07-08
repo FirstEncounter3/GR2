@@ -17,7 +17,7 @@ class Ui_Dialog(object):
         Dialog.resize(543, 316)
         Dialog.setMaximumSize(QtCore.QSize(543, 316))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(".\\../../ico/cloud_72.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(".\\ico/cloud_72.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Dialog.setWindowIcon(icon)
         Dialog.setStyleSheet("QWidget {\n"
 "    color: white;\n"
