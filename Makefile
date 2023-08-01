@@ -17,7 +17,6 @@ venv: venv/bin/activate
 
 run: venv
 	$(PYTHON) main.py
-	exit
 
 clean:
 	rm -rf __pycache__
