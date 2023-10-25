@@ -3,6 +3,7 @@
 import json
 import sys
 import os
+import platform
 
 import requests
 
@@ -23,6 +24,7 @@ MSG_DN = " ● Done!"
 MSG_ER = " ● Error!"
 MSG_DT_RC = " ● Data received!"
 MSG_NO_DT = " ● No data!"
+MSG_NOT_SAVED = " ● Not saved! "
 
 COLOR_DEFAULT = "#F0FFFF"
 COLOR_DONE = "#20E631"
@@ -78,11 +80,14 @@ class GR2(QtWidgets.QMainWindow):
             self, "Save file", "magic_json", "json (*.json)"
         )
         try:
-            with open(destination[0], "w", encoding="utf-8") as f:
-                f.write(decoder(raw_json))
-            self.status_bar_msgs(COLOR_DONE, MSG_DN)
-        except FileNotFoundError as e:
-            create_window_with_error_text(e, "Указанный путь не существует")
+            if platform.system() == 'Linux':
+                with open(destination[0]+'.json', "w", encoding="utf-8") as f:
+                    f.write(decoder(raw_json))
+                self.status_bar_msgs(COLOR_DONE, MSG_DN)
+            else:
+                with open(destination[0], "w", encoding="utf-8") as f:
+                    f.write(decoder(raw_json))
+                self.status_bar_msgs(COLOR_DONE, MSG_DN)
         except json.decoder.JSONDecodeError as e:
             create_window_with_error_text(e, "Вставлен некорректный JSON")
             self.status_bar_msgs(COLOR_ERROR, MSG_ER)
@@ -138,9 +143,11 @@ class GR2(QtWidgets.QMainWindow):
     def to_get_data(self) -> None:
         try:
             self.check_token_input()
-            self.ui.textEdit_json.clear()
 
             if self.create_window():
+
+                self.ui.textEdit_json.clear()
+
                 if self.child_window.ui.products_btn.isChecked():
                     self.goods()
                 else:
@@ -150,7 +157,6 @@ class GR2(QtWidgets.QMainWindow):
                 self.status_bar_msgs(COLOR_DT_RC, MSG_DT_RC)
             else:
                 self.status_bar_msgs(COLOR_DEFAULT, MSG_NO_DT)
-                self.ui.textEdit_json.setText("")
         except EmptyTokenField as e:
             create_window_with_error_text(e, "Empty token field")
         except requests.exceptions.HTTPError as e:
