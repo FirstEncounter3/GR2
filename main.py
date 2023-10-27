@@ -41,7 +41,7 @@ class GR2(QtWidgets.QMainWindow):
         # version
         self.ui.label_version.setText(VERSION)
 
-        # set_statusbar_default
+        # set_status_bar_default
         self.ui.statusbar.showMessage(MSG_LSTN)
 
         # buttons
@@ -88,6 +88,8 @@ class GR2(QtWidgets.QMainWindow):
                 with open(destination[0], "w", encoding="utf-8") as f:
                     f.write(decoder(raw_json))
                 self.status_bar_msgs(COLOR_DONE, MSG_DN)
+        except FileNotFoundError:
+            self.status_bar_msgs(COLOR_DEFAULT, MSG_NOT_SAVED)
         except json.decoder.JSONDecodeError as e:
             create_window_with_error_text(e, "Вставлен некорректный JSON")
             self.status_bar_msgs(COLOR_ERROR, MSG_ER)
